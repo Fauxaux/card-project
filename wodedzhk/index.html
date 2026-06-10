@@ -1,100 +1,120 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>生日贺卡生成器</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-        body {
-            background: #f8f9fa;
-            max-width: 500px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #ff5c8d;
-            margin-bottom: 20px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #ff5c8d;
-            color: white;
-            font-size: 17px;
-            border: none;
-            border-radius: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #ff3b7d;
-        }
-        #qrcode {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .tip {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>生日贺卡生成器</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<style>
+  body {
+    font-family: "微软雅黑", sans-serif;
+    background: linear-gradient(120deg, #fff0f6, #fef5e7);
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    color: #ff6b81;
+  }
+  .form-item {
+    margin: 15px 0;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .styles {
+    display: flex;
+    gap: 10px;
+  }
+  .styles label {
+    font-weight: normal;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #ff6b81;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #ff4757;
+  }
+  #qrcode {
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎂 贺卡生成器</h1>
-        <input type="text" id="name" placeholder="请输入昵称">
-        <input type="date" id="birthday">
-        <select id="style">
-            <option value="1">🌸 可爱粉嫩风</option>
-            <option value="2">✨ 温馨星光风</option>
-            <option value="3">📎 简约高级风</option>
-        </select>
-        <button onclick="generate()">生成贺卡二维码</button>
-        <div id="qrcode"></div>
-        <div class="tip">扫码即可查看精美电子贺卡</div>
+<div class="container">
+  <h1>🎂 生成生日贺卡二维码</h1>
+
+  <div class="form-item">
+    <label for="name">对方昵称</label>
+    <input type="text" id="name" placeholder="例如：小明" />
+  </div>
+
+  <div class="form-item">
+    <label for="birthday">生日</label>
+    <input type="date" id="birthday" />
+  </div>
+
+  <div class="form-item">
+    <label>贺卡风格</label>
+    <div class="styles">
+      <label><input type="radio" name="style" value="pink" checked /> 粉色</label>
+      <label><input type="radio" name="style" value="blue" /> 蓝色</label>
+      <label><input type="radio" name="style" value="gold" /> 金色</label>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-    <script>
-        function generate() {
-            let name = document.getElementById("name").value;
-            let birthday = document.getElementById("birthday").value;
-            let style = document.getElementById("style").value;
+  <button id="generate">生成贺卡二维码</button>
 
-            if (!name || !birthday) {
-                alert("请填写完整信息！");
-                return;
-            }
+  <div id="qrcode"></div>
+</div>
 
-            let cardURL = `view.html?n=${encodeURIComponent(name)}&b=${birthday}&s=${style}`;
+<script>
+document.getElementById("generate").addEventListener("click", function () {
+  let name = document.getElementById("name").value.trim();
+  let birthday = document.getElementById("birthday").value;
+  let style = document.querySelector('input[name="style"]:checked').value;
 
-            QRCode.toCanvas(document.getElementById("qrcode"), cardURL, {
-                width: 260,
-                color: { dark: "#ff5c8d", light: "#ffffff" }
-            });
-        }
-    </script>
+  if (!name || !birthday) {
+    alert("请填写昵称和生日！");
+    return;
+  }
+
+  // ✅ 这里已经写死成你的 GitHub Pages 网址
+  let cardURL = `https://fauxaux.github.io/card-project/view.html?n=${encodeURIComponent(name)}&b=${birthday}&s=${style}`;
+
+  document.getElementById("qrcode").innerHTML = "";
+  new QRCode(document.getElementById("qrcode"), {
+    text: cardURL,
+    width: 200,
+    height: 200
+  });
+});
+</script>
 </body>
 </html>
