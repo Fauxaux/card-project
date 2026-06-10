@@ -3,91 +3,90 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>生日快乐</title>
+<title>生日贺卡</title>
 <style>
-  body {
+  * {
     margin: 0;
     padding: 0;
-    font-family: "微软雅黑", sans-serif;
-    height: 100vh;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.5s;
+    padding: 20px;
+    transition: background 0.5s;
   }
 
-  /* 三种风格背景 */
-  .style-pink {
-    background: linear-gradient(120deg, #ffe6ee, #ffd6e0);
+  /* 风格1：温馨粉 */
+  .style1 {
+    background: linear-gradient(120deg, #ffeef8, #ffe6f2);
   }
-  .style-blue {
-    background: linear-gradient(120deg, #e6f4ff, #cce8ff);
+  .style1 .card {
+    background: #fff;
+    color: #333;
+    border: 2px solid #f8bbd0;
+    box-shadow: 0 4px 12px rgba(248,187,208,0.3);
   }
-  .style-gold {
-    background: linear-gradient(120deg, #fff9e6, #fff2cc);
+
+  /* 风格2：清新蓝 */
+  .style2 {
+    background: linear-gradient(120deg, #eef6ff, #e0edff);
+  }
+  .style2 .card {
+    background: #fff;
+    color: #333;
+    border: 2px solid #90caf9;
+    box-shadow: 0 4px 12px rgba(144,202,249,0.3);
   }
 
   .card {
-    background: #fff;
-    padding: 40px 30px;
-    border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    text-align: center;
+    width: 100%;
     max-width: 400px;
-    margin: 20px;
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
   }
 
-  h1 {
-    font-size: 28px;
+  .card h1 {
+    font-size: 26px;
     margin-bottom: 15px;
   }
-
-  .style-pink h1 { color: #ff6b81; }
-  .style-blue h1 { color: #409eff; }
-  .style-gold h1 { color: #d4af37; }
-
-  p {
-    font-size: 18px;
-    color: #555;
-    line-height: 1.8;
-    margin: 10px 0;
+  .card p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 8px 0;
   }
-
-  .cake {
-    font-size: 60px;
-    margin: 20px 0;
-  }
-
-  .footer {
-    margin-top: 30px;
-    font-size: 14px;
-    color: #999;
+  .heart {
+    color: #e91e63;
   }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="cake">🎂</div>
-  <h1>生日快乐，<span id="name"></span>！</h1>
-  <p>今天是你的生日：<span id="birthday"></span></p>
-  <p>愿你每一天都开开心心，健康平安，万事顺意！</p>
-  <p>✨ 专属你的生日祝福 ✨</p>
-  <div class="footer">from 你的朋友</div>
+  <h1>生日快乐 🎂</h1>
+  <p>亲爱的 <strong id="name"></strong>：</p>
+  <p>今天是你的生日：<strong id="birthday"></strong></p>
+  <p>愿你每一天都开心、健康、平安顺遂！</p>
+  <p class="heart">❤️ 特别的祝福给特别的你 ❤️</p>
 </div>
 
 <script>
-// 读取 URL 参数
-const params = new URLSearchParams(window.location.search);
+// 读取 URL 参数：n=昵称&b=生日&s=风格
+const params = new URLSearchParams(location.search);
 const name = params.get("n") || "朋友";
 const birthday = params.get("b") || "未知";
-const style = params.get("s") || "pink";
+const style = params.get("s") || "1";
 
-// 插入内容
-document.getElementById("name").textContent = name;
+// 填入内容
+document.getElementById("name").textContent = decodeURIComponent(name);
 document.getElementById("birthday").textContent = birthday;
 
 // 应用风格
-document.body.classList.add("style-" + style);
+document.body.classList.add(style === "2" ? "style2" : "style1");
 </script>
+
 </body>
 </html>
