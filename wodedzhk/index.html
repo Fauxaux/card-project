@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>生日贺卡生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #f8f9fa;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #ff5c8d;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #ff5c8d;
+            color: white;
+            font-size: 17px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff3b7d;
+        }
+        #qrcode {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tip {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 贺卡生成器</h1>
+        <input type="text" id="name" placeholder="请输入昵称">
+        <input type="date" id="birthday">
+        <select id="style">
+            <option value="1">🌸 可爱粉嫩风</option>
+            <option value="2">✨ 温馨星光风</option>
+            <option value="3">📎 简约高级风</option>
+        </select>
+        <button onclick="generate()">生成贺卡二维码</button>
+        <div id="qrcode"></div>
+        <div class="tip">扫码即可查看精美电子贺卡</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script>
+        function generate() {
+            let name = document.getElementById("name").value;
+            let birthday = document.getElementById("birthday").value;
+            let style = document.getElementById("style").value;
+
+            if (!name || !birthday) {
+                alert("请填写完整信息！");
+                return;
+            }
+
+            let cardURL = `view.html?n=${encodeURIComponent(name)}&b=${birthday}&s=${style}`;
+
+            QRCode.toCanvas(document.getElementById("qrcode"), cardURL, {
+                width: 260,
+                color: { dark: "#ff5c8d", light: "#ffffff" }
+            });
+        }
+    </script>
+</body>
+</html>

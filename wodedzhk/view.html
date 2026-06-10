@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>生日贺卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            max-width: 450px;
+            width: 100%;
+        }
+        .card h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .card p {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        .style1 {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+        }
+        .style2 {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+        .style3 {
+            background: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" id="card">
+        <h1>生日快乐 🎂</h1>
+        <p id="content"></p>
+    </div>
+
+<script>
+    let params = new URLSearchParams(location.search);
+    let name = params.get("n");
+    let birthday = params.get("b");
+    let style = params.get("s");
+
+    document.getElementById("content").innerText =
+        `昵称：${name}\n生日：${birthday}\n愿你平安喜乐，万事顺遂！`;
+
+    document.getElementById("card").className = "card style" + style;
+</script>
+</body>
+</html>
