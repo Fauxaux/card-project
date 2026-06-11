@@ -1,129 +1,226 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>生日贺卡生成器</title>
-<!-- 稳定版二维码库 -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/lib/browser.min.js"></script>
-<style>
-  body {
-    font-family: "微软雅黑", sans-serif;
-    background: linear-gradient(120deg, #fff0f6, #fef5e7);
-    margin: 0;
-    padding: 20px;
-  }
-  .container {
-    max-width: 500px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  h1 {
-    text-align: center;
-    color: #ff6b81;
-  }
-  .form-item {
-    margin: 15px 0;
-  }
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #333;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  .styles {
-    display: flex;
-    gap: 10px;
-  }
-  .styles label {
-    font-weight: normal;
-  }
-  button {
-    width: 100%;
-    padding: 12px;
-    background: #ff6b81;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #ff4757;
-  }
-  #qrcode {
-    text-align: center;
-    margin-top: 20px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎂 生日祝福二维码生成器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #888;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn-generate {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 8px;
+        }
+        .btn-generate:active {
+            transform: scale(0.98);
+        }
+        .qr-section {
+            display: none;
+            margin-top: 28px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        .qr-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #qrcode {
+            display: inline-block;
+            padding: 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+        .qr-hint {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .btn-download {
+            display: inline-block;
+            padding: 10px 24px;
+            background: #f0f0f0;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-download:hover { background: #e0e0e0; }
+        .preview-link {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #999;
+            word-break: break-all;
+        }
+        .emoji-deco {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h1>🎂 生成生日贺卡二维码</h1>
+    <div class="container">
+        <div class="header">
+            <div class="emoji-deco">🎂✨🎁</div>
+            <h1>生日祝福二维码生成器</h1>
+            <p>输入信息，生成专属生日祝福二维码</p>
+        </div>
 
-  <div class="form-item">
-    <label for="name">对方昵称</label>
-    <input type="text" id="name" placeholder="例如：小明" />
-  </div>
+        <div class="form-group">
+            <label>👤 寿星昵称</label>
+            <input type="text" id="nickname" placeholder="例如：小明" maxlength="20">
+        </div>
 
-  <div class="form-item">
-    <label for="birthday">生日</label>
-    <input type="date" id="birthday" />
-  </div>
+        <div class="form-group">
+            <label>📅 生日日期</label>
+            <input type="date" id="birthday">
+        </div>
 
-  <div class="form-item">
-    <label>贺卡风格</label>
-    <div class="styles">
-      <label><input type="radio" name="style" value="1" checked /> 粉色</label>
-      <label><input type="radio" name="style" value="2" /> 蓝色</label>
+        <div class="form-group">
+            <label>💌 祝福语（可选，留空使用默认）</label>
+            <textarea id="message" placeholder="例如：愿你的每一天都充满阳光和欢笑！" maxlength="200"></textarea>
+        </div>
+
+        <button class="btn-generate" onclick="generateQR()">✨ 生成二维码</button>
+
+        <div class="qr-section" id="qrSection">
+            <div id="qrcode"></div>
+            <p class="qr-hint">📱 用微信扫一扫，送上生日祝福</p>
+            <button class="btn-download" onclick="downloadQR()">💾 保存二维码</button>
+            <div class="preview-link" id="previewLink"></div>
+        </div>
     </div>
-  </div>
 
-  <button id="generate">生成贺卡二维码</button>
-  <div id="qrcode"></div>
-</div>
+    <script>
+        const baseUrl = window.location.href.replace('index.html', '').replace(/\/$/, '');
 
-<script>
-document.getElementById("generate").addEventListener("click", function () {
-  let name = document.getElementById("name").value.trim();
-  let birthday = document.getElementById("birthday").value;
-  let style = document.querySelector('input[name="style"]:checked').value;
+        function generateQR() {
+            const nickname = document.getElementById('nickname').value.trim();
+            const birthday = document.getElementById('birthday').value;
+            const message = document.getElementById('message').value.trim();
 
-  if (!name || !birthday) {
-    alert("请填写昵称和生日！");
-    return;
-  }
+            if (!nickname) {
+                alert('请输入寿星昵称！');
+                return;
+            }
+            if (!birthday) {
+                alert('请选择生日日期！');
+                return;
+            }
 
-  let cardURL = `https://fauxaux.github.io/card-project/view.html?n=${encodeURIComponent(name)}&b=${birthday}&s=${style}`;
+            const params = new URLSearchParams();
+            params.set('name', nickname);
+            params.set('date', birthday);
+            if (message) params.set('msg', message);
 
-  const qrcodeContainer = document.getElementById("qrcode");
-  qrcodeContainer.innerHTML = "";
+            const wishUrl = baseUrl + '/wish.html?' + params.toString();
 
-  // ✅ 正确写法：用 QRCode.toCanvas，不再用 new
-  QRCode.toCanvas(cardURL, {
-    width: 200,
-    height: 200,
-    margin: 2,
-    color: { dark: "#000000", light: "#ffffff" }
-  })
-  .then(canvas => {
-    qrcodeContainer.appendChild(canvas);
-  })
-  .catch(err => {
-    console.error("二维码生成失败：", err);
-    alert("生成失败，请检查网络或稍后重试！");
-  });
-});
-</script>
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            new QRCode(qrContainer, {
+                text: wishUrl,
+                width: 220,
+                height: 220,
+                colorDark: '#333333',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('qrSection').classList.add('active');
+            document.getElementById('previewLink').textContent = wishUrl;
+            window.currentQRUrl = wishUrl;
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('请先生成二维码！');
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = '生日祝福二维码.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                generateQR();
+            }
+        });
+    </script>
 </body>
 </html>
