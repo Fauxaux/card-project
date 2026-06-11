@@ -1,92 +1,272 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>生日贺卡</title>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: "Microsoft YaHei", sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    transition: background 0.5s;
-  }
-
-  /* 风格1：温馨粉 */
-  .style1 {
-    background: linear-gradient(120deg, #ffeef8, #ffe6f2);
-  }
-  .style1 .card {
-    background: #fff;
-    color: #333;
-    border: 2px solid #f8bbd0;
-    box-shadow: 0 4px 12px rgba(248,187,208,0.3);
-  }
-
-  /* 风格2：清新蓝 */
-  .style2 {
-    background: linear-gradient(120deg, #eef6ff, #e0edff);
-  }
-  .style2 .card {
-    background: #fff;
-    color: #333;
-    border: 2px solid #90caf9;
-    box-shadow: 0 4px 12px rgba(144,202,249,0.3);
-  }
-
-  .card {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 16px;
-    padding: 30px 20px;
-    text-align: center;
-  }
-
-  .card h1 {
-    font-size: 26px;
-    margin-bottom: 15px;
-  }
-  .card p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin: 8px 0;
-  }
-  .heart {
-    color: #e91e63;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎂 生日快乐！</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        .balloon {
+            position: fixed;
+            bottom: -100px;
+            width: 50px; height: 60px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float-up 8s linear infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: 50%;
+            width: 2px; height: 30px;
+            background: rgba(255,255,255,0.5);
+            transform: translateX(-50%);
+        }
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 24px;
+            text-align: center;
+        }
+        .cake {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .name {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .birthday-text {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 4px;
+        }
+        .age-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .message-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 28px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 24px;
+        }
+        .message-box p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.95);
+        }
+        .emoji-row {
+            font-size: 32px;
+            margin-top: 20px;
+            animation: shake 1.5s infinite ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+        .confetti {
+            position: fixed;
+            width: 10px; height: 10px;
+            top: -10px;
+            animation: confetti-fall 4s linear infinite;
+            z-index: 5;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .firework {
+            position: fixed;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
-<div class="card">
-  <h1>生日快乐 🎂</h1>
-  <p>亲爱的 <strong id="name"></strong>：</p>
-  <p>今天是你的生日：<strong id="birthday"></strong></p>
-  <p>愿你每一天都开心、健康、平安顺遂！</p>
-  <p class="heart">❤️ 特别的祝福给特别的你 ❤️</p>
-</div>
+    <div class="stars" id="stars"></div>
+    <div id="balloons"></div>
+    <div id="confetti"></div>
 
-<script>
-// 读取 URL 参数：n=昵称&b=生日&s=风格
-const params = new URLSearchParams(location.search);
-const name = params.get("n") || "朋友";
-const birthday = params.get("b") || "未知";
-const style = params.get("s") || "1";
+    <div class="content">
+        <div class="cake">🎂</div>
+        <div class="name" id="name">亲爱的朋友</div>
+        <div class="birthday-text">🎉 生日快乐 🎉</div>
+        <div class="age-badge" id="ageBadge">今天是你的特别日子</div>
 
-// 填入内容
-document.getElementById("name").textContent = decodeURIComponent(name);
-document.getElementById("birthday").textContent = birthday;
+        <div class="message-box">
+            <p id="message">愿你的每一天都充满阳光和欢笑，所有的愿望都能实现！</p>
+            <div class="emoji-row">🎁🎈🎊✨💖</div>
+        </div>
 
-// 应用风格
-document.body.classList.add(style === "2" ? "style2" : "style1");
-</script>
+        <div class="footer">扫码送上最真挚的祝福 💕</div>
+    </div>
 
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = decodeURIComponent(params.get('name') || '亲爱的朋友');
+        const dateStr = params.get('date');
+        const customMsg = decodeURIComponent(params.get('msg') || '');
+
+        document.getElementById('name').textContent = name;
+
+        if (dateStr) {
+            const birthDate = new Date(dateStr);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            if (age >= 0) {
+                document.getElementById('ageBadge').textContent = `🎂 今天 ${age} 岁啦！`;
+            }
+        }
+
+        const defaultMessages = [
+            `愿${name}的每一天都充满阳光和欢笑，所有的愿望都能实现！`,
+            `祝${name}生日快乐！愿你永远保持热爱，奔赴山海！`,
+            `今天是${name}的特别日子，愿所有美好如期而至！`,
+            `生日快乐${name}！愿你被这个世界温柔以待！`
+        ];
+        const msg = customMsg || defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
+        document.getElementById('message').textContent = msg;
+
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            star.style.width = star.style.height = (Math.random() * 3 + 1) + 'px';
+            starsContainer.appendChild(star);
+        }
+
+        const balloonColors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
+        const balloonsContainer = document.getElementById('balloons');
+        for (let i = 0; i < 8; i++) {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.left = Math.random() * 90 + 5 + '%';
+            balloon.style.background = balloonColors[i % balloonColors.length];
+            balloon.style.animationDelay = Math.random() * 5 + 's';
+            balloon.style.animationDuration = (6 + Math.random() * 4) + 's';
+            balloonsContainer.appendChild(balloon);
+        }
+
+        const confettiColors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#1dd1a1', '#ff9f43'];
+        const confettiContainer = document.getElementById('confetti');
+        for (let i = 0; i < 30; i++) {
+            const conf = document.createElement('div');
+            conf.className = 'confetti';
+            conf.style.left = Math.random() * 100 + '%';
+            conf.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            conf.style.animationDelay = Math.random() * 4 + 's';
+            conf.style.animationDuration = (3 + Math.random() * 3) + 's';
+            conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confettiContainer.appendChild(conf);
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = particle.style.height = (Math.random() * 6 + 3) + 'px';
+
+                const angle = (Math.PI * 2 * i) / 20;
+                const distance = 80 + Math.random() * 60;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+
+                particle.animate([
+                    { transform: 'translate(0,0)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1200);
+            }
+        }
+
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            createFirework(x, y);
+        }, 2000);
+
+        document.addEventListener('click', (e) => {
+            createFirework(e.clientX, e.clientY);
+        });
+    </script>
 </body>
 </html>
