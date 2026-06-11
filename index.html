@@ -2,82 +2,96 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<title>生成贺卡二维码</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>生日贺卡生成器</title>
+<!-- 稳定版二维码库 -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/lib/browser.min.js"></script>
 <style>
   body {
-    font-family: "Microsoft YaHei", sans-serif;
+    font-family: "微软雅黑", sans-serif;
+    background: linear-gradient(120deg, #fff0f6, #fef5e7);
+    margin: 0;
     padding: 20px;
-    background: #f5f5f5;
   }
   .container {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 40px auto;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
-  h2 {
+  h1 {
     text-align: center;
+    color: #ff6b81;
   }
-  .item {
+  .form-item {
     margin: 15px 0;
   }
   label {
-    display: inline-block;
-    width: 80px;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
   }
   input {
-    padding: 6px;
-    width: 280px;
-  }
-  button {
-    display: block;
     width: 100%;
     padding: 10px;
-    background: #007bff;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .styles {
+    display: flex;
+    gap: 10px;
+  }
+  .styles label {
+    font-weight: normal;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #ff6b81;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
   }
   button:hover {
-    background: #0056b3;
+    background: #ff4757;
   }
   #qrcode {
-    margin-top: 20px;
     text-align: center;
+    margin-top: 20px;
   }
 </style>
 </head>
 <body>
 <div class="container">
-  <h2>填写信息生成贺卡二维码</h2>
+  <h1>🎂 生成生日贺卡二维码</h1>
 
-  <div class="item">
-    <label for="name">昵称：</label>
-    <input type="text" id="name" placeholder="请输入昵称" />
+  <div class="form-item">
+    <label for="name">对方昵称</label>
+    <input type="text" id="name" placeholder="例如：小明" />
   </div>
 
-  <div class="item">
-    <label for="birthday">生日：</label>
+  <div class="form-item">
+    <label for="birthday">生日</label>
     <input type="date" id="birthday" />
   </div>
 
-  <div class="item">
-    <label>风格：</label>
-    <input type="radio" name="style" value="1" checked> 风格一
-    <input type="radio" name="style" value="2"> 风格二
+  <div class="form-item">
+    <label>贺卡风格</label>
+    <div class="styles">
+      <label><input type="radio" name="style" value="1" checked /> 粉色</label>
+      <label><input type="radio" name="style" value="2" /> 蓝色</label>
+    </div>
   </div>
 
-  <button id="generate">点击生成二维码</button>
-
+  <button id="generate">生成贺卡二维码</button>
   <div id="qrcode"></div>
 </div>
-
-<!-- 关键：用稳定版 CDN（1.5.4） -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/lib/browser.min.js"></script>
 
 <script>
 document.getElementById("generate").addEventListener("click", function () {
@@ -90,31 +104,26 @@ document.getElementById("generate").addEventListener("click", function () {
     return;
   }
 
-  // 生成贺卡链接（确保是你自己的 GitHub Pages 地址）
   let cardURL = `https://fauxaux.github.io/card-project/view.html?n=${encodeURIComponent(name)}&b=${birthday}&s=${style}`;
 
   const qrcodeContainer = document.getElementById("qrcode");
-  qrcodeContainer.innerHTML = ""; // 清空旧二维码
+  qrcodeContainer.innerHTML = "";
 
-  // 第一种方案：用 QRCode.toCanvas（Promise 写法）
+  // ✅ 正确写法：用 QRCode.toCanvas，不再用 new
   QRCode.toCanvas(cardURL, {
     width: 200,
     height: 200,
     margin: 2,
-    color: {
-      dark: "#000000",
-      light: "#ffffff"
-    }
+    color: { dark: "#000000", light: "#ffffff" }
   })
   .then(canvas => {
     qrcodeContainer.appendChild(canvas);
   })
   .catch(err => {
     console.error("二维码生成失败：", err);
-    alert("二维码生成失败，请稍后重试！");
+    alert("生成失败，请检查网络或稍后重试！");
   });
 });
 </script>
-
 </body>
 </html>
