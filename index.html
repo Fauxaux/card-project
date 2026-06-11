@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+
+import os
+
+project_dir = "/mnt/agents/output/birthday-qr"
+
+fixed_index_html = '''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -123,10 +128,24 @@
             font-size: 12px;
             color: #999;
             word-break: break-all;
+            padding: 0 10px;
         }
         .emoji-deco {
             font-size: 48px;
             margin-bottom: 12px;
+        }
+        .debug-info {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            text-align: left;
+            word-break: break-all;
+        }
+        .debug-info strong {
+            color: #333;
         }
     </style>
 </head>
@@ -160,11 +179,27 @@
             <p class="qr-hint">📱 用微信扫一扫，送上生日祝福</p>
             <button class="btn-download" onclick="downloadQR()">💾 保存二维码</button>
             <div class="preview-link" id="previewLink"></div>
+            <div class="debug-info" id="debugInfo"></div>
         </div>
     </div>
 
     <script>
-        const baseUrl = window.location.href.replace('index.html', '').replace(/\/$/, '');
+        function getBaseUrl() {
+            let url = window.location.href;
+            url = url.split('#')[0];
+            url = url.split('?')[0];
+            
+            if (url.endsWith('/')) {
+                return url;
+            }
+            
+            const lastSlash = url.lastIndexOf('/');
+            if (lastSlash !== -1) {
+                url = url.substring(0, lastSlash + 1);
+            }
+            
+            return url;
+        }
 
         function generateQR() {
             const nickname = document.getElementById('nickname').value.trim();
@@ -180,12 +215,14 @@
                 return;
             }
 
+            const baseUrl = getBaseUrl();
+            
             const params = new URLSearchParams();
             params.set('name', nickname);
             params.set('date', birthday);
             if (message) params.set('msg', message);
 
-            const wishUrl = baseUrl + '/wish.html?' + params.toString();
+            const wishUrl = baseUrl + 'wish.html?' + params.toString();
 
             const qrContainer = document.getElementById('qrcode');
             qrContainer.innerHTML = '';
@@ -201,6 +238,12 @@
 
             document.getElementById('qrSection').classList.add('active');
             document.getElementById('previewLink').textContent = wishUrl;
+            
+            document.getElementById('debugInfo').innerHTML = 
+                '<strong>当前页面URL:</strong> ' + window.location.href + '<br>' +
+                '<strong>基础URL:</strong> ' + baseUrl + '<br>' +
+                '<strong>二维码链接:</strong> ' + wishUrl;
+
             window.currentQRUrl = wishUrl;
         }
 
@@ -223,4 +266,9 @@
         });
     </script>
 </body>
-</html>
+</html>'''
+
+with open(os.path.join(project_dir, 'index.html'), 'w', encoding='utf-8') as f:
+    f.write(fixed_index_html)
+
+print("✅ index.html 已修复并保存！")
