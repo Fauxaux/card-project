@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>制作专属生日祝福 🎁</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+
     <style>
         /* 全局样式与柔和的生日氛围渐变背景 */
         * {
@@ -74,9 +80,6 @@
             transition: all 0.3s ease;
             background: #f8f9fa;
             color: #2f3542;
-        }
-        
-        input[type="text"] {
             text-align: center;
         }
 
@@ -140,6 +143,20 @@
             color: #ff6b81;
             font-weight: 500;
         }
+
+        /* 自定义日历弹窗样式，使其完美融合粉色主题 */
+        .flatpickr-calendar {
+            border-radius: 16px !important;
+            box-shadow: 0 10px 25px rgba(255, 107, 129, 0.15) !important;
+            border: 1px solid rgba(255, 107, 129, 0.1) !important;
+        }
+        .flatpickr-day.selected, .flatpickr-day.selected:hover {
+            background: #ff6b81 !important;
+            border-color: #ff6b81 !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            color: #2f3542 !important;
+        }
     </style>
 </head>
 <body>
@@ -150,12 +167,12 @@
         
         <div class="input-group">
             <span class="input-label">好友昵称：</span>
-            <input type="text" id="nickname" placeholder="请输入好友昵称">
+            <input type="text" id="nickname">
         </div>
 
         <div class="input-group">
             <span class="input-label">出生日期：</span>
-            <input type="date" id="birthdate">
+            <input type="text" id="birthdate" readonly>
         </div>
         
         <button onclick="generateQR()">生成惊喜二维码</button>
@@ -169,6 +186,13 @@
     </div>
 
     <script>
+        // 初始化中文日历
+        flatpickr("#birthdate", {
+            locale: "zh",
+            dateFormat: "Y-m-d",
+            disableMobile: "true" // 强制在手机端也使用高颜值的自制中文日历
+        });
+
         function generateQR() {
             const nickname = document.getElementById('nickname').value.trim();
             const birthdate = document.getElementById('birthdate').value;
@@ -179,12 +203,11 @@
             }
 
             // 【重要：记得把下面的“你的仓库名”改成你实际的 GitHub 仓库名称】
+            // 目标文件已由 blessing.html 变更为 view.html
             const baseUrl = "https://fauxaux.github.io/card-project/view.html"; 
             
-            // 同时把名字和日期拼接到网址后面
             const targetUrl = baseUrl + "?name=" + encodeURIComponent(nickname) + "&date=" + encodeURIComponent(birthdate);
 
-            // 清空旧二维码并生成新二维码
             document.getElementById("qrcode").innerHTML = "";
             new QRCode(document.getElementById("qrcode"), {
                 text: targetUrl,
@@ -195,7 +218,6 @@
                 correctLevel : QRCode.CorrectLevel.L
             });
 
-            // 动画显示二维码
             document.getElementById("qr-container").classList.add("show");
         }
     </script>
