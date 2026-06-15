@@ -20,7 +20,7 @@
             padding: 20px;
         }
 
-        /* 手机端全屏微飘动感卡片 */
+        /* 手机端全屏微动感卡片 */
         .blessing-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -40,7 +40,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* 飘动的生日蛋糕图标 */
         .cake-icon {
             font-size: 60px;
             margin-bottom: 20px;
@@ -104,19 +103,17 @@
         const name = urlParams.get('name');
         const date = urlParams.get('date');
 
-        // 如果有名字，替换标题
         if (name) {
             document.getElementById('greeting').innerText = name + "，生日快乐！";
         }
 
-        // 如果有日期，将其转换成中文格式并显示
         if (date) {
-            const dateParts = date.split('-'); // 比如把 "1998-05-20" 拆开
+            const dateParts = date.split('-'); 
             if (dateParts.length === 3) {
                 const formattedDate = dateParts[0] + " 年 " + dateParts[1] + " 月 " + dateParts[2] + " 日";
                 const dateDisplay = document.getElementById('date-display');
                 dateDisplay.innerText = "🎂 出生日期：" + formattedDate;
-                dateDisplay.style.display = 'inline-block'; // 让标签显示出来
+                dateDisplay.style.display = 'inline-block'; 
             }
         }
     </script>
