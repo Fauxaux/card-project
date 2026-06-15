@@ -6,14 +6,14 @@
     <title>制作专属生日祝福 🎁</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        /* 全局样式重置与优雅的奶油粉渐变背景 */
+        /* 全局样式与柔和的生日氛围渐变背景 */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: linear-gradient(135deg, #ffeef4 0%, #fff1f1 100%);
             min-height: 100vh;
             display: flex;
@@ -22,7 +22,7 @@
             padding: 20px;
         }
 
-        /* 节日感毛玻璃卡片容器 */
+        /* 毛玻璃卡片容器 */
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -41,19 +41,29 @@
             font-size: 24px;
             margin-bottom: 8px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .subtitle {
             color: #747d8c;
             font-size: 14px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
-        /* 极简精致的输入框 */
+        /* 输入框区域 */
         .input-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
+            text-align: left;
         }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #57606f;
+            font-size: 14px;
+            font-weight: 500;
+            padding-left: 4px;
+        }
+
         input {
             width: 100%;
             padding: 14px 20px;
@@ -64,8 +74,12 @@
             transition: all 0.3s ease;
             background: #f8f9fa;
             color: #2f3542;
+        }
+        
+        input[type="text"] {
             text-align: center;
         }
+
         input:focus {
             border-color: #ff6b81;
             background: #fff;
@@ -86,16 +100,14 @@
             box-shadow: 0 8px 20px rgba(255, 117, 140, 0.35);
             transition: all 0.3s ease;
             letter-spacing: 1px;
+            margin-top: 5px;
         }
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 24px rgba(255, 117, 140, 0.45);
         }
-        button:active {
-            transform: translateY(0);
-        }
 
-        /* 二维码弹出动画区域 */
+        /* 二维码弹出区域 */
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.9); }
             100% { opacity: 1; transform: scale(1); }
@@ -109,7 +121,6 @@
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* 拍立得相片质感的二维码白框 */
         .qr-box {
             background: white;
             padding: 16px;
@@ -118,6 +129,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             border: 1px solid #f1f2f6;
         }
+        
         #qrcode img {
             margin: 0 auto;
         }
@@ -134,10 +146,16 @@
 
     <div class="card">
         <h2>制作专属生日祝福 🎁</h2>
-        <div class="subtitle">输入好友昵称，一键生成惊喜二维码</div>
+        <div class="subtitle">输入基本信息，一键生成惊喜二维码</div>
         
         <div class="input-group">
-            <input type="text" id="nickname" placeholder="想要祝福的好友昵称">
+            <span class="input-label">好友昵称：</span>
+            <input type="text" id="nickname" placeholder="请输入好友昵称">
+        </div>
+
+        <div class="input-group">
+            <span class="input-label">出生日期：</span>
+            <input type="date" id="birthdate">
         </div>
         
         <button onclick="generateQR()">生成惊喜二维码</button>
@@ -153,21 +171,21 @@
     <script>
         function generateQR() {
             const nickname = document.getElementById('nickname').value.trim();
-            if (!nickname) {
-                alert("请先输入好友的昵称哦！💗");
+            const birthdate = document.getElementById('birthdate').value;
+            
+            if (!nickname || !birthdate) {
+                alert("把昵称和出生日期都填好，惊喜才完整哦！💗");
                 return;
             }
 
             // 【重要：记得把下面的“你的仓库名”改成你实际的 GitHub 仓库名称】
             const baseUrl = "https://fauxaux.github.io/card-project/view.html"; 
             
-            // 拼接参数
-            const targetUrl = baseUrl + "?name=" + encodeURIComponent(nickname);
+            // 同时把名字和日期拼接到网址后面
+            const targetUrl = baseUrl + "?name=" + encodeURIComponent(nickname) + "&date=" + encodeURIComponent(birthdate);
 
-            // 清空旧的二维码
+            // 清空旧二维码并生成新二维码
             document.getElementById("qrcode").innerHTML = "";
-
-            // 生成新的二维码（保持 L 级别低容错率，防止长网址溢出崩溃）
             new QRCode(document.getElementById("qrcode"), {
                 text: targetUrl,
                 width: 220,
@@ -177,9 +195,8 @@
                 correctLevel : QRCode.CorrectLevel.L
             });
 
-            // 让二维码容器带着漂亮的动画显示出来
-            const container = document.getElementById("qr-container");
-            container.classList.add("show");
+            // 动画显示二维码
+            document.getElementById("qr-container").classList.add("show");
         }
     </script>
 
